@@ -2,7 +2,7 @@
 from django.http import Http404, HttpResponse
 from core.models import Person, Semester
 import json
-from django.shortcuts import render_to_response
+#from django.shortcuts import render_to_response
 
 def get_people(request):
     """
@@ -58,7 +58,3 @@ def get_people_by_semester(request, semester):
 
     js=json.dumps(s.to_dict_full())
     return HttpResponse(js)
-
-def test(request):
-    return HttpResponse(open('core/static/main.js', 'r').read(), content_type='application/javascript')
-    #return render_to_response('core/static/main.html')

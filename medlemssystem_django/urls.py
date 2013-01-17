@@ -12,7 +12,6 @@ urlpatterns = patterns('',
     url(r'^json_lifetime$', 'core.views.get_lifetime'),
     url(r'^json_semester$', 'core.views.get_semesters'),
     url(r'^json_semester/(?P<semester>.*?)$', 'core.views.get_people_by_semester'),
-    #url(r'^test$', 'core.views.test'),
-    url(r'^test/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'core/static' }),
+    url(r'^main/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'core/static' }),
 
 )

@@ -61,7 +61,6 @@ class Person(models.Model):
         retval={}
         retval['name']=self.name
         retval['date_join']=self.date_join.strftime('%Y-%m-%d %H:%M:%S')
-        #retval['semester']=self.semester.name
         retval['lifetime']=self.lifetime
 
         return retval
