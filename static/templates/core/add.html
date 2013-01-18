@@ -2,14 +2,20 @@
 
 {% if name %}<p>{{name}} added!{% endif %}
 
+{% if fail %}<p><strong>{{fail}}</strong>{% endif %}
+
 <form action="add" method="post">
     {% csrf_token %}
+
     <label for="name">Name</label>
     <input type="text" name="name" id="name" /></br>
+
     <label for="email">Email</label>
     <input type="text" name="email" id="email" /></br>
+
     <label for="life">Lifetime membership</label>
     <input type="checkbox" name="life" id="life" /></br>
+
     <input type="submit" value="Save"/>
 </form>
 

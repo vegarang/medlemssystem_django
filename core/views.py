@@ -7,14 +7,28 @@ import datetime
 
 def add_person(request):
     if request.POST:
+        if not 'name' in request.POST or request.POST['name']=="":
+            return render_to_response('core/add.html', {'fail':'no name in POST-data'}, context_instance=RequestContext(request))
+
+        args={'name':request.POST['name']}
+        if 'email' in request.POST and request.POST['email']!="":
+            args['email']=request.POST['email']
+        if 'life' in request.POST and request.POST['life']!="":
+            args['lifetime']=request.POST['life']
+
         now=datetime.date.today()
         s=Semester.objects.filter(start_date__lte=now, end_date__gte=now)
         if len(s)==0:
             s=makesemester()
         else:
             s=s[0]
-        p=Person.objects.create(semester=s, name=request.POST['name'], email=request.POST['email'], lifetime=request.POST['life'])
-        return render_to_response('core/add.html', {'name':request.POST['name']}, context_instance=RequestContext(request))
+        args['semester']=s
+        try:
+            p=Person.objects.create(**args)
+        except:
+            return render_to_response('core/add.html', {'fail':'Database-error, most likely name is already added..'}, context_instance=RequestContext(request))
+
+        return render_to_response('core/add.html', {'name':args['name']}, context_instance=RequestContext(request))
 
     return render_to_response('core/add.html', context_instance=RequestContext(request))
 
