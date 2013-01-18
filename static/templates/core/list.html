@@ -1,0 +1,9 @@
+<h1>All people! </h1>
+
+<ul>
+    {% for person in people %}
+    <li>{{ person.name}}</li>
+    {% endfor %}
+</ul>
+
+<a href="/person/add">Add person</a>
