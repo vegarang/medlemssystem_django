@@ -1,5 +1,5 @@
 # Create your views here.
-from django.http import Http404, HttpResponse
+#from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
 from core.models import Person, Semester
 from django.template import RequestContext
@@ -33,7 +33,10 @@ def add_person(request):
     return render_to_response('core/add.html', context_instance=RequestContext(request))
 
 def list_person(request):
-    return render_to_response('core/list.html', {'people':Person.objects.all()}, context_instance=RequestContext(request))
+    gap=datetime.datetime.now()-datetime.timedelta(hours=12)
+    people=Person.objects.all()
+    current=people.filter(date_join__gte=gap)
+    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'current':len(current)}, context_instance=RequestContext(request))
 
 def makesemester():
     now=datetime.date.today()

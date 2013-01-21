@@ -1,5 +1,9 @@
 <h1>All people! </h1>
 
+{% if total %}<p>{{total}} members total {% endif %}
+{% if current %}<p>{{current}} members last 12 hours {% endif %}
+
+
 <ul>
     {% for person in people %}
     <li>{{ person.name}}</li>
