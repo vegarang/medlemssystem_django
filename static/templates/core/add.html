@@ -1,10 +1,14 @@
 <h1> Add Person! </h1>
 
-{% if name %}<p>{{name}} added!{% endif %}
+{% if name %}{{ name }} saved!<br>{% endif %}
 
-{% if fail %}<p><strong>{{fail}}</strong>{% endif %}
+{% if removed %}{{ removed }} was deleted<br>{% endif %}
 
-<form action="add" method="post">
+{% if info %}{{ info }}<br>{% endif %}
+
+{% if fail %}<strong>{{ fail }}</strong><br>{% endif %}
+
+<form action="/person/add" method="post">
     {% csrf_token %}
 
     <label for="name">Name</label>
@@ -13,11 +17,12 @@
     <label for="email">Email</label>
     <input type="text" name="email" id="email" /></br>
 
-    <label for="life">Lifetime membership</label>
-    <input type="checkbox" name="life" id="life" /></br>
+    <input type="radio" name="life" value="single" checked />Single semester</br>
+    <input type="radio" name="life" value="life" />Lifetime membership</br>
 
     <input type="submit" value="Save"/>
 </form>
 
 <p>
-<a href="/person/list">List people</a>
+<a href="/person/list">List all people</a><br>
+<a href="/">Main menu</a>

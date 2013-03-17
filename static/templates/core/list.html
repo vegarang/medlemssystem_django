@@ -1,13 +1,31 @@
-<h1>All people! </h1>
+<h1> {{ headline }} </h1>
 
-{% if total %}<p>{{total}} members total {% endif %}
-{% if current %}<p>{{current}} members last 12 hours {% endif %}
+{% if total %} {{ total }} total <br>{% endif %}
+{% if num_cur %} {{ num_cur }} new members last 12 hours <br>{% endif %}
+{% if num_life %}{{ num_life }} <a href="/person/listlifetime">lifetime</a> members <br>{% endif %}
 
+<p>
 
-<ul>
+<table>
     {% for person in people %}
-    <li>{{ person.name}}</li>
+    <tr>
+        <form action="/person/edit" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="check" />
+            <input type="hidden" name="name" value="{{ person.name }}" />
+            <input type="hidden" name="email" value="{{ person.email }}" />
+            <td>{{ person.name }} </td>
+            <td><input type="submit" value="edit"/></td>
+        </form>
+        </li>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 
-<a href="/person/add">Add person</a>
+<p>
+
+{% if origin %}
+<a href="/person/{{ origin }}">Back to {{ origin }}</a><br>
+{% endif %}
+<a href="/person/add">Add person</a><br>
+<a href="/">Main menu</a>
