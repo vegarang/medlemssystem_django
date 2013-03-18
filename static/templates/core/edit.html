@@ -26,12 +26,14 @@
 </form>
 <form action="/person/delete" method="post">
     {% csrf_token %}
-    <input type="hidden" name="person" value="{{ person }}">
+    <input type="hidden" name="name" value="{{ person.name }}" />
+    <input type="hidden" name="email" value="{{ person.email }}" />
+    <input type="hidden" name="check" />
     <input type="submit" value="Delete"/>
 </form>
 <form action="/person/add" method="post">
     {% csrf_token %}
-    <input type="hidden" name="info" value="{{ name }} was not edited!">
+    <input type="hidden" name="info" value="{{ person.name }} was not edited!">
     <input type="submit" value="Cancel"/>
 </form>
 <a href="/person/list">List people</a>

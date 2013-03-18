@@ -103,7 +103,7 @@ def edit_person(request):
     return render_to_response('core/add.html', {'name':p.name}, context_instance=RequestContext(request))
 
 
-def list_person(request):
+def list_all_ever(request):
     """
     lists all people, and gives info on how many members last 12 hours, and how many lifetime members.
     """
@@ -111,7 +111,18 @@ def list_person(request):
     people=Person.objects.all()
     lifetime=len(people.filter(lifetime=True))
     current=len(people.filter(date_join__gte=gap))
-    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'num_cur':current, 'num_life':lifetime, 'headline':'All members'}, context_instance=RequestContext(request))
+    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'num_cur':current, 'num_life':lifetime, 'headline':'All members since the dawn of time'}, context_instance=RequestContext(request))
+
+def list_current_nolifetime(request):
+    """
+    same as list_person, but only lists people who are members this semester, or are lifetime members.
+    """
+    gap=datetime.datetime.now()-datetime.timedelta(hours=12)
+    now=datetime.date.today()
+    s=Semester.objects.filter(start_date__lte=now, end_date__gte=now)[0]
+    people=Person.objects.all().exclude(lifetime=True).exclude(date_join__lte=s.start_date)
+    current=len(people.filter(date_join__gte=gap))
+    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'num_cur':current, 'headline':'All current members (except lifetime-members)'}, context_instance=RequestContext(request))
 
 def list_current(request):
     """
@@ -123,7 +134,7 @@ def list_current(request):
     people=Person.objects.all().exclude(lifetime=False, date_join__lte=s.start_date)
     lifetime=len(people.filter(lifetime=True))
     current=len(people.filter(date_join__gte=gap))
-    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'num_cur':current, 'num_life':lifetime, 'headline':'All members'}, context_instance=RequestContext(request))
+    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'num_cur':current, 'num_life':lifetime, 'headline':'All valid members this semester'}, context_instance=RequestContext(request))
 
 def list_lifetime(request):
     """

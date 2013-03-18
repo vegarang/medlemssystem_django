@@ -7,7 +7,7 @@
 {% if info %}{{ info }}<br>{% endif %}
 
 {% if fail %}<strong>{{ fail }}</strong><br>{% endif %}
-
+<p>
 <form action="/person/add" method="post">
     {% csrf_token %}
 
