@@ -19,3 +19,6 @@ urlpatterns = patterns('',
     url(r'^$', 'core.views.index'),
 
 )
+
+(r'^(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': '/static/css/'}),
