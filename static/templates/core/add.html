@@ -3,31 +3,61 @@
     <link rel="stylesheet" type="text/css" href="{% static "stuff.css" %}">
 </head>
 
-<h1> Add Person! </h1>
+<div id="logo">
+    <h1>Cybernetisk Selskab</h1>
+</div>
 
-{% if name %}{{ name }} saved!<br>{% endif %}
+<div id="outerWrapper">
 
-{% if removed %}{{ removed }} was deleted<br>{% endif %}
+    <div id="search" class="searchForm">
 
-{% if info %}{{ info }}<br>{% endif %}
+    <h2 class="smallHeader">Search</h2>
 
-{% if fail %}<strong>{{ fail }}</strong><br>{% endif %}
-<p>
-<form action="/person/add" method="post">
-    {% csrf_token %}
+    <form id ="src" action="/person/search" method="post">
+        {% csrf_token %}
+        <p class="informative">
+        <label class="name"for="name">Name</label>
+        <input type="text" name="name" id="name" /><br>
+        <input type="radio" name="membership" value="all" checked id="current" />Current semester</input>
+        <br>
+        <input type="radio" name="membership" value="life" id="life" />Lifetime membership</p></input>
+        </p>
 
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" /></br>
+        <button type="submit" value="Search">Search</button>
+    </form>
 
-    <label for="email">Email</label>
-    <input type="text" name="email" id="email" /></br>
+</div>
 
-    <input type="radio" name="life" value="single" checked />Single semester</br>
-    <input type="radio" name="life" value="life" />Lifetime membership</br>
+    <div id="wrapper">
 
-    <input type="submit" value="Save"/>
-</form>
+        <h2 class="smallHeader">Add member</h2>
 
-<p>
-<a href="/person/list">List all people</a><br>
-<a href="/">Main menu</a>
+        <p class="informative">
+        {% if name %}{{ name }} saved!<br>{% endif %}
+
+        {% if removed %}{{ removed }} was deleted<br>{% endif %}
+
+        {% if info %}{{ info }}<br>{% endif %}
+
+        {% if fail %}<strong>{{ fail }}</strong><br>{% endif %}
+        </p>
+        <div id="addMember" class="searchForm">
+        <form action="/person/add" method="post">
+            {% csrf_token %}
+            <p class="informative">
+            <label class="name" for="name">Name</label>
+            <input type="text" name="name" id="name" /></br>
+
+            <label class="email" for="email">Email</label>
+            <input type="text" name="email" id="email" /></br>
+
+             <input type="radio" name="life" value="single" checked />Single semester</br>
+            <input type="radio" name="life" value="life" />Lifetime membership</br>
+
+            <button type="submit" value="Save">Save</button>
+        </form>
+        </p>
+    </div>
+    </div>
+
+</div>
