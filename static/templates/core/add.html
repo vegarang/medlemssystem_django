@@ -1,33 +1,49 @@
-<head>
-    {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static "stuff.css" %}">
-</head>
+{% extends "sitebase.html" %}
 
-<h1> Add Person! </h1>
+{% block addactive %}class="active"{% endblock %} 
 
-{% if name %}{{ name }} saved!<br>{% endif %}
+{% block title %}CYB - add member{% endblock %}
 
-{% if removed %}{{ removed }} was deleted<br>{% endif %}
+{% block maincontent %}
+    <h1>New member!</h1>
+    <p> - join us! all the cool kids are doing it..</p>
+    <p>Some form-stuff..</p>
+    <p><button type="button" class="btn-primary btn-large btn">Save » </button></p>
+{% endblock %}
 
-{% if info %}{{ info }}<br>{% endif %}
+{% block sub1 %}
+    <p>Name</p>
+    <p>timestamp</p>
+    <p><button type="button" class="btn btn-small">Edit » </button></p>
+{% endblock %}
 
-{% if fail %}<strong>{{ fail }}</strong><br>{% endif %}
-<p>
-<form action="/person/add" method="post">
-    {% csrf_token %}
+{% block sub2 %}
+    <p>Name</p>
+    <p>timestamp</p>
+    <p><button type="button" class="btn btn-small">Edit » </button></p>
+{% endblock %}
 
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" /></br>
+{% block sub3 %}
+    <p>Name</p>
+    <p>timestamp</p>
+    <p><button type="button" class="btn btn-small">Edit » </button></p>
+{% endblock %}
 
-    <label for="email">Email</label>
-    <input type="text" name="email" id="email" /></br>
+{% block sub4 %}
+    <p>Name</p>
+    <p>timestamp</p>
+    <p><button type="button" class="btn btn-small">Edit » </button></p>
+{% endblock %}
 
-    <input type="radio" name="life" value="single" checked />Single semester</br>
-    <input type="radio" name="life" value="life" />Lifetime membership</br>
+{% block sub5 %}
+    <p>Name</p>
+    <p>timestamp</p>
+    <p><button type="button" class="btn btn-small">Edit » </button></p>
+{% endblock %}
 
-    <input type="submit" value="Save"/>
-</form>
+{% block sub6 %}
+    <p>Name</p>
+    <p>timestamp</p>
+    <p><button type="button" class="btn btn-small">Edit » </button></p>
+{% endblock %}
 
-<p>
-<a href="/person/list">List all people</a><br>
-<a href="/">Main menu</a>
