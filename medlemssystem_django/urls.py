@@ -14,6 +14,8 @@ urlpatterns = patterns('',
     url(r'^life/?$', 'core.views.life'),
     url(r'^all/?$', 'core.views.all'),
     url(r'^view/?$', 'core.views.view'),
+    url(r'^about/?$', 'core.views.about'),
+    url(r'^notes/?$', 'core.views.notes'),
 
 
     url(r'^test$', 'core.views.test'),

@@ -54,15 +54,15 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="brand" href="#">Project name</a>
+                    <a class="brand" href="/">CYBms2.0</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
-                        Logged in as <a href="#" class="navbar-link">Username</a>
+                        Login to the <a href="admin/" class="navbar-link">admin-panel</a>
                         </p>
                         <ul class="nav">
-                            <li class="active"><a href="#">Home</a></li>
-                            <li><a href="#about">About</a></li>
-                            <li><a href="#contact">Contact</a></li>
+                            <li {% block tophomeactive %}{% endblock %} ><a href="/">Home</a></li>
+                            <li {% block aboutactive %}{% endblock %} ><a href="/about">About</a></li>
+                            <li {% block notesactive %}{% endblock %} ><a href="/notes">Notes</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>

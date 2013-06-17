@@ -7,43 +7,72 @@
 {% block maincontent %}
     <h1>New member!</h1>
     <p> - join us! all the cool kids are doing it..</p>
-    <p>Some form-stuff..</p>
-    <p><button type="button" class="btn-primary btn-large btn">Save » </button></p>
+    {% if error %}
+    <p class="text-error">sorry.. no anonymous members..</p>
+    {% endif %}
+    {% if info %}
+    <p class="text-info">Hey! We dont want to steal your money, and you're already registered :-)</p>
+    {% endif %}
+    {% if success %}
+    <p class="text-success">Success!</p>
+    {% endif %}
+    <form class="form-inline" action="/add" method="post">
+        {% csrf_token %}
+        <input type="text" class="input" name="name" id="name" placeholder="Full name">
+        <input type="text" class="input" name="email" id="email" placeholder="Email address">
+        <button type="submit" class="btn-primary btn">Save » </button>
+    </form>
+    
 {% endblock %}
 
 {% block sub1 %}
-    <p>Name</p>
-    <p>timestamp</p>
-    <p><button type="button" class="btn btn-small">Edit » </button></p>
+    {% if sub1 %}
+    <p>{{sub1.name}}</p>
+    <p>{{sub1.date_join}}</p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub1.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    {% endif %}
 {% endblock %}
 
 {% block sub2 %}
-    <p>Name</p>
-    <p>timestamp</p>
+    {% if sub2 %}
+    <p>{{sub2.name}}</p>
+    <p>{{sub2.date_join}}</p>
     <p><button type="button" class="btn btn-small">Edit » </button></p>
+    {% endif %}
 {% endblock %}
 
 {% block sub3 %}
-    <p>Name</p>
-    <p>timestamp</p>
+    {% if sub3 %}
+    <p>{{sub3.name}}</p>
+    <p>{{sub3.date_join}}</p>
     <p><button type="button" class="btn btn-small">Edit » </button></p>
+    {% endif %}
 {% endblock %}
 
 {% block sub4 %}
-    <p>Name</p>
-    <p>timestamp</p>
+    {% if sub4 %}
+    <p>{{sub4.name}}</p>
+    <p>{{sub4.date_join}}</p>
     <p><button type="button" class="btn btn-small">Edit » </button></p>
+    {% endif %}
 {% endblock %}
 
 {% block sub5 %}
-    <p>Name</p>
-    <p>timestamp</p>
+    {% if sub5 %}
+    <p>{{sub5.name}}</p>
+    <p>{{sub5.date_join}}</p>
     <p><button type="button" class="btn btn-small">Edit » </button></p>
+    {% endif %}
 {% endblock %}
 
 {% block sub6 %}
-    <p>Name</p>
-    <p>timestamp</p>
+    {% if sub6 %}
+    <p>{{sub6.name}}</p>
+    <p>{{sub6.date_join}}</p>
     <p><button type="button" class="btn btn-small">Edit » </button></p>
+    {% endif %}
 {% endblock %}
-
