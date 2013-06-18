@@ -5,19 +5,19 @@
 {% block maincontent %}
     <h1>View, edit delete</h1>
     <p> - what? typing errors!? Noooooooeees!</p>
-    <form action="/add" method="post">
+    <form action="/view" method="post">
         {% csrf_token %}
-        <input type="text" class="input" name="name" id="name" value={{person.name}} placeholder="Full name">
-        <input type="text" class="input" name="email" id="email" value={{person.email}} placeholder="Email address">
+        <input type="text" class="input" name="name" id="name" value="{{person.name}}" placeholder="Full name">
+        <input type="text" class="input" name="email" id="email" value="{{person.email}}" placeholder="Email address">
         <label class="checkbox">
-            <input type="checkbox" id="lifetime" value="lifetime">Lifetime member?
+            <input type="checkbox" name="lifetime" id="lifetime" {% if person.lifetime %} checked {% endif %} >Lifetime member?
         </label>
-        <label class="checkbox">
-            <input type="checkbox" id="delete" value="delete">Delete this member?
-        </label>
-        <input type="hidden" class="input" name="id" id="id" value={{person.id}}>
-        
-        <button type="submit" class="btn-primary btn">Save » </button>
+        <input type="hidden" name="id" id="id" value={{person.id}}>
+        <div class="btn-toolbar">
+            <button type="submit" name="save" class="btn-primary btn">Save » </button>
+            <button type="submit" name="delete" class="btn-danger btn">Delete » </button>
+            <button type="submit" name="cancel" class="btn">Cancel » </button>
+        </div>
     </form>
 {% endblock %}
 

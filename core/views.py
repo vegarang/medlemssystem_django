@@ -44,33 +44,83 @@ def add(request):
     return render_to_response('core/add.html', _get_newest_members(), context_instance=RequestContext(request))
 
 def search(request):
-    return render_to_response('core/search.html', context_instance=RequestContext(request))
+    if not request.POST or not 'search' in request.POST or request.POST['search']=='':
+        return render_to_response('core/search.html', context_instance=RequestContext(request))
+
+    if 'all' in request.POST:
+        return render_to_response('core/search.html',{'results':_get_all(request.POST['search'])}, context_instance=RequestContext(request))
+
+    if 'valid' in request.POST:
+        return render_to_response('core/search.html',{'results':_get_valid(request.POST['search'])}, context_instance=RequestContext(request))
+
+    if 'life' in request.POST:
+        return render_to_response('core/search.html',{'results':_get_life(request.POST['search'])}, context_instance=RequestContext(request))
+
 
 def valid(request):
-    return render_to_response('core/valid.html', context_instance=RequestContext(request))
+    args={
+          'results':_get_valid(),
+          'head':'All valid members!',
+          'caption':' - kind of nice to know who they are, right?'
+         }
+    return render_to_response('core/list.html', args, context_instance=RequestContext(request))
 
 def life(request):
-    return render_to_response('core/life.html', context_instance=RequestContext(request))
+    args={
+          'results':_get_life(),
+          'head':'Lifetime memberships!',
+          'caption':' - So awesome that they get their own page!'
+         }
+    return render_to_response('core/list.html', args, context_instance=RequestContext(request))
 
 def all(request):
-    return render_to_response('core/all.html', context_instance=RequestContext(request))
+    args={
+          'results':_get_all(),
+          'head':'All members!',
+          'caption':' - because, why not?'
+         }
+    return render_to_response('core/list.html', args, context_instance=RequestContext(request))
+    return render_to_response('core/list.html', context_instance=RequestContext(request))
+
+def _get_valid(search=""):
+    now=datetime.date.today()
+    s=Semester.objects.filter(start_date__lte=now, end_date__gte=now)
+    qs=Person.objects.filter(name__icontains=search, lifetime=True)
+    if not len(s) == 0:
+        s=s[0]
+        qs1=Person.objects.filter(name__icontains=search, semester=s)
+        qs=qs|qs1
+
+    qs.order_by('-date_join')
+
+    return qs
+
+def _get_life(search=""):
+    return Person.objects.filter(name__icontains=search, lifetime=True)
+
+def _get_all(search=""):
+    return Person.objects.filter(name__icontains=search)
+
 
 def view(request):
+    if request.POST and 'cancel' in request.POST:
+        return render_to_response('core/add.html', _get_newest_members(), context_instance=RequestContext(request))
+
     if not request.POST or not 'id' in request.POST:
         v = _get_newest_members()
-        v['info']=True
+        v['error']=True
         return render_to_response('core/add.html', v, context_instance=RequestContext(request))
 
     p=Person.objects.get(id=request.POST['id'])
-    if 'delete' in request.POST and request.POST['delete']:
+    if 'delete' in request.POST:
         return render_to_response('core/delete.html', {'person':p}, context_instance=RequestContext(request))
 
-    if not 'name' in request.POST or not 'email' in request.POST or not 'lifetime' in request.POST:
+    if not 'name' in request.POST or not 'email' in request.POST:
         return render_to_response('core/view.html', {'person':p}, context_instance=RequestContext(request))
 
     p.name = request.POST['name']
     p.email = request.POST['email']
-    p.lifetime = True if request.POST['name'] == 'y' else False
+    p.lifetime = True if 'lifetime' in request.POST else False
 
     p.save()
 
@@ -80,12 +130,24 @@ def view(request):
 
 def delete(request):
     if not request.POST or not 'id' in request.POST:
-        return render_to_response('core/add.html', {'error':True}, context_instance=RequestContext(request))
+        v=_get_newest_members()
+        v['error']=True
+        return render_to_response('core/add.html', v, context_instance=RequestContext(request))
 
-    p=Person.objects.get(id=request.POST['id'])
-    p.delete()
+    if 'cancel' in request.POST or not 'confirm' in request.POST:
+        return render_to_response('core/add.html', _get_newest_members(), context_instance=RequestContext(request))
 
-    return render_to_response('core/add.html', {'success':True}, context_instance=RequestContext(request))
+    try:
+        Person.objects.get(id=request.POST['id']).delete()
+    except:
+        v=_get_newest_members()
+        v['error']=True
+        return render_to_response('core/add.html', v, context_instance=RequestContext(request))
+
+
+    v=_get_newest_members()
+    v['success']=True
+    return render_to_response('core/add.html', v, context_instance=RequestContext(request))
 
 def test(request):
     return render_to_response('core_old/fluid.html', context_instance=RequestContext(request))

@@ -8,7 +8,7 @@
     <h1>New member!</h1>
     <p> - join us! all the cool kids are doing it..</p>
     {% if error %}
-    <p class="text-error">sorry.. no anonymous members..</p>
+    <p class="text-error">I'm sorry, Dave. I'm afraid I can't do that..</p>
     {% endif %}
     {% if info %}
     <p class="text-info">Hey! We dont want to steal your money, and you're already registered :-)</p>
@@ -27,6 +27,7 @@
 
 {% block sub1 %}
     {% if sub1 %}
+    <div class="well well-small">
     <p>{{sub1.name}}</p>
     <p>{{sub1.date_join}}</p>
     <form class="form-inline" action="/view" method="post">
@@ -34,45 +35,76 @@
         <input type="hidden" class="input" name="id" id="id" value={{sub1.id}}>
         <button type="submit" class="btn-small btn">Edit » </button>
     </form>
+    </div>
     {% endif %}
 {% endblock %}
 
 {% block sub2 %}
     {% if sub2 %}
+    <div class="well well-small">
     <p>{{sub2.name}}</p>
     <p>{{sub2.date_join}}</p>
-    <p><button type="button" class="btn btn-small">Edit » </button></p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub2.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
     {% endif %}
 {% endblock %}
 
 {% block sub3 %}
     {% if sub3 %}
+    <div class="well well-small">
     <p>{{sub3.name}}</p>
     <p>{{sub3.date_join}}</p>
-    <p><button type="button" class="btn btn-small">Edit » </button></p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub3.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
     {% endif %}
 {% endblock %}
 
 {% block sub4 %}
     {% if sub4 %}
+    <div class="well well-small">
     <p>{{sub4.name}}</p>
     <p>{{sub4.date_join}}</p>
-    <p><button type="button" class="btn btn-small">Edit » </button></p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub4.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
     {% endif %}
 {% endblock %}
 
 {% block sub5 %}
     {% if sub5 %}
+    <div class="well well-small">
     <p>{{sub5.name}}</p>
     <p>{{sub5.date_join}}</p>
-    <p><button type="button" class="btn btn-small">Edit » </button></p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub5.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
     {% endif %}
 {% endblock %}
 
 {% block sub6 %}
     {% if sub6 %}
+    <div class="well well-small">
     <p>{{sub6.name}}</p>
     <p>{{sub6.date_join}}</p>
-    <p><button type="button" class="btn btn-small">Edit » </button></p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub6.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
     {% endif %}
 {% endblock %}

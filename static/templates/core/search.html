@@ -2,72 +2,42 @@
 
 {% block searchactive %}class="active"{% endblock %} 
 
-{% block title %}CYB - {% endblock %}
+{% block title %}CYB - Search{% endblock %}
 
 {% block maincontent %}
     <h1>Search</h1>
     <p> - hey.. every system has one!</p>
-    <p>some input</p>
-    <p><button type="button">Search</button></p>
+    <form class="form-inline" target="/search" method="post">
+        {% csrf_token %}
+        <div class="input-append">
+            <input type="text" name="search" class="search">
+            <button type="submit" name="valid" class="btn btn-primary">Search valid members » </button>
+            <button type="submit" name="life" class="btn btn-warning">Search lifetime » </button>
+            <button type="submit" name="all" class="btn btn-danger">Search all » </button>
+        </div>
+    </form>
 {% endblock %}
 
 {% block sub1 %}
-    <h2>Search results:</h2>
-    <table>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>Timestamp</td>
-            <td><button type="button">Edit</button></td>
-        </tr>
-    </table>
+    {% if results %}
+        <h2>Search results:</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Timestamp</td>
+                    <td>Name</td>
+                    <td>Email address</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in results %}
+                    <tr>
+                        <td>{{res.date_join}}</td>
+                        <td>{{res.name}}</td>
+                        <td>{{res.email}}</td>
+                    </tr>
+                {% endfor %}
+            <tbody>
+        </table>
+    {% endif %}
 {% endblock %}
