@@ -59,6 +59,7 @@ def search(request):
 
 def valid(request):
     args={
+          'type':'valid',
           'results':_get_valid(),
           'head':'All valid members!',
           'caption':' - kind of nice to know who they are, right?'
@@ -67,6 +68,7 @@ def valid(request):
 
 def life(request):
     args={
+          'type':'life',
           'results':_get_life(),
           'head':'Lifetime memberships!',
           'caption':' - So awesome that they get their own page!'
@@ -75,6 +77,7 @@ def life(request):
 
 def all(request):
     args={
+          'type':'all',
           'results':_get_all(),
           'head':'All members!',
           'caption':' - because, why not?'

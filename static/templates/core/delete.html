@@ -1,0 +1,16 @@
+{% extends "sitebase.html" %}
+
+{% block title %}CYB - delete member{% endblock %}
+
+{% block maincontent %}
+    <h1>Delete? Really?</h1>
+    <p> - deleting is kind of permanent, soo.. are you sure you want to delete {{person.name}}?</p>
+    <form class="form-inline" action="/delete" method="post">
+        {% csrf_token %}
+        <input type=hidden name="id" value={{person.id}}>
+        <button type="submit" name="cancel" class="btn-primary btn">No » </button>
+        <button type="submit" name="confirm" class="btn-danger btn">Yes » </button>
+    </form>
+    
+{% endblock %}
+

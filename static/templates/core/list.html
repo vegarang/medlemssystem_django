@@ -1,0 +1,35 @@
+{% extends "sitebase.html" %}
+
+{% block {{type}}active %}class="active"{% endblock %} 
+
+{% block title %}CYB - list members{% endblock %}
+
+{% block maincontent %}
+    <h1>{{head}}</h1>
+    <p>{{caption}}</p>
+{% endblock %}
+
+{% block sub1 %}
+    {% if results %}
+        <h2>Peoples:</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Timestamp</td>
+                    <td>Name</td>
+                    <td>Email address</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in results %}
+                    <tr>
+                        <td>{{res.date_join}}</td>
+                        <td>{{res.name}}</td>
+                        <td>{{res.email}}</td>
+                    </tr>
+                {% endfor %}
+            <tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
