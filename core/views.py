@@ -152,10 +152,7 @@ def delete(request):
     v['success']=True
     return render_to_response('core/add.html', v, context_instance=RequestContext(request))
 
-def test(request):
-    return render_to_response('core_old/fluid.html', context_instance=RequestContext(request))
-
-def _get_newest_members(numback=6):
+def _get_newest_members(numback=4):
     people=Person.objects.order_by('-date_join')[:numback]
     vals={}
     i=1

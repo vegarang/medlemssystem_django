@@ -71,7 +71,7 @@
 
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span3">
+                <div class="span2">
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
                             <li class="nav-header">Navigation</li>
@@ -84,7 +84,7 @@
                         </ul>
                     </div><!--/.well -->
                 </div><!--/span-->
-                <div class="span9">
+                <div class="span10">
                     <div class="hero-unit">
                         {% block maincontent %}
                         <h1>Error!</h1>
@@ -92,30 +92,22 @@
                         {% endblock %}
                     </div>
                     <div class="row-fluid">
-                        <div class="span4">
+                        <div class="span6">
                             {% block sub1 %}
                             {% endblock %}
                         </div><!--/span-->
-                        <div class="span4">
+                        <div class="span6">
                             {% block sub2 %}
-                            {% endblock %}
-                        </div><!--/span-->
-                        <div class="span4">
-                            {% block sub3 %}
                             {% endblock %}
                         </div><!--/span-->
                     </div>
                     <div class="row-fluid">
-                        <div class="span4">
+                        <div class="span6">
+                            {% block sub3 %}
+                            {% endblock %}
+                        </div><!--/span-->
+                        <div class="span6">
                             {% block sub4 %}
-                            {% endblock %}
-                        </div><!--/span-->
-                        <div class="span4">
-                            {% block sub5 %}
-                            {% endblock %}
-                        </div><!--/span-->
-                        <div class="span4">
-                            {% block sub6 %}
                             {% endblock %}
                         </div><!--/span-->
                     </div>
