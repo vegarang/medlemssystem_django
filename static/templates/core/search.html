@@ -27,6 +27,7 @@
                     <td>Timestamp</td>
                     <td>Name</td>
                     <td>Email address</td>
+                    <td>Edit</td>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,13 @@
                         <td>{{res.date_join}}</td>
                         <td>{{res.name}}</td>
                         <td>{{res.email}}</td>
+                        <td>
+                            <form class="form-inline" action="/view" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" class="input" name="id" id="id" value={{sub1.id}}>
+                                <button type="submit" class="btn-mini btn">edit</button>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
             <tbody>
