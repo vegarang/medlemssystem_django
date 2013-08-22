@@ -1,49 +1,16 @@
-<h1> Remove a person! </h1>
+{% extends "sitebase.html" %}
 
-<p>
-{% if person %}
-Really delete {{ person.name }}?
+{% block title %}CYB - delete member{% endblock %}
 
-<table>
-    <tr>
-        <td>
-            <form action="/person/delete" method="post">
-                {% csrf_token %}
-
-                <input type="hidden" name="name" value="{{ person.name }}">
-                {% if person.email %}
-                <input type="hidden" name="email" value="{{ person.email }}">
-                {% endif %}
-
-                <input type="submit" value="Delete!"/>
-            </form>
-        </td>
-        <td>
-            <form action="/person/add" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="info" value="{{ person.name }} was not deleted!">
-                <input type="submit" value="Cancel!"/>
-            </form>
-        </td>
-    </tr>
-</table>
-
-{% else %}
-
-<form action="/person/delete" method="post">
-    {% csrf_token %}
+{% block maincontent %}
+    <h1>Delete? Really?</h1>
+    <p> - deleting is kind of permanent, soo.. are you sure you want to delete {{person.name}}?</p>
+    <form class="form-inline" action="/delete" method="post">
+        {% csrf_token %}
+        <input type=hidden name="id" value={{person.id}}>
+        <button type="submit" name="cancel" class="btn-primary btn">No » </button>
+        <button type="submit" name="confirm" class="btn-danger btn">Yes » </button>
+    </form>
     
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" /></br>
-
-    <label for="email">Email</label>
-    <input type="text" name="email" id="email" /></br>
-
-    <input type="submit" value="Delete!"/>
-    <input type="submit" value="Cancel!"/>
-</form>
-
-{% endif %}
-
-<a href="/person/list">List people</a>
+{% endblock %}
 

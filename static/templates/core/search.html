@@ -1,18 +1,43 @@
-<h1>Search!</h1>
+{% extends "sitebase.html" %}
 
-<form action="/person/search" method="post">
-    {% csrf_token %}
+{% block searchactive %}class="active"{% endblock %} 
 
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" /></br>
+{% block title %}CYB - Search{% endblock %}
 
-    <input type="radio" name="membership" value="all" checked />Current semester</br>
-    <input type="radio" name="membership" value="life" />Lifetime membership</br>
+{% block maincontent %}
+    <h1>Search</h1>
+    <p> - hey.. every system has one!</p>
+    <form class="form-inline" target="/search" method="post">
+        {% csrf_token %}
+        <div class="input-append">
+            <input type="text" name="search" class="search">
+            <button type="submit" name="valid" class="btn btn-primary">Search valid members » </button>
+            <button type="submit" name="life" class="btn btn-warning">Search lifetime » </button>
+            <button type="submit" name="all" class="btn btn-danger">Search all » </button>
+        </div>
+    </form>
+{% endblock %}
 
-    <input type="submit" value="Search"/>
-</form>
-
-<p>
-
-<a href="/person/add">Add person</a><br>
-<a href="/">Main menu</a>
+{% block sub1 %}
+    {% if results %}
+        <h2>Search results:</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Timestamp</td>
+                    <td>Name</td>
+                    <td>Email address</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in results %}
+                    <tr>
+                        <td>{{res.date_join}}</td>
+                        <td>{{res.name}}</td>
+                        <td>{{res.email}}</td>
+                    </tr>
+                {% endfor %}
+            <tbody>
+        </table>
+    {% endif %}
+{% endblock %}

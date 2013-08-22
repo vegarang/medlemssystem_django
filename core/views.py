@@ -1,64 +1,32 @@
-# Create your views here.
-#from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
 from core.models import Person, Semester
 from django.template import RequestContext
 import datetime
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 
-def delete_person(request):
+def home(request):
+    return render_to_response('core/home.html', context_instance=RequestContext(request))
+
+def add(request):
     """
-    Takes a POST-request with name (required) and email (optional), locates the person that matches, and deletes it. If no person is found, or multiple
-    people are found, an error will be returned.
-
-    if the argument 'check' is found in the POST-request, then a site asking if you are sure you want to delete is shown instead.
-    """
-    if not request.POST:
-        return render_to_response('core/delete.html', context_instance=RequestContext(request))
-
-    if not 'name' in request.POST or request.POST['name']=="":
-        return render_to_response('core/add.html', {'fail':'Delete failed! No name in POST-data'}, context_instance=RequestContext(request))
-
-    args={'name':request.POST['name']}
-    if 'email' in request.POST:
-        args['email']=request.POST['email']
-
-    try:
-        p=Person.objects.get(**args)
-    except MultipleObjectsReturned:
-        return render_to_response('core/add.html', {'fail':'Delete failed! Multiple people match search'}, context_instance=RequestContext(request))
-    except ObjectDoesNotExist:
-        return render_to_response('core/add.html', {'fail':'Delete failed! Person not found..'}, context_instance=RequestContext(request))
-
-    if 'check' in request.POST:
-        return render_to_response('core/delete.html', {'person':p}, context_instance=RequestContext(request))
-
-    p.delete()
-    return render_to_response('core/add.html', {'removed':request.POST['name']}, context_instance=RequestContext(request))
-
-def add_person(request):
-    """
-    reads name (required) email (optional) and lifetime(optional) from a POST-request, and creates a Person with the required fields.
+    reads name (required) and email (optional) from a POST-request, and creates a Person with the required fields.
 
     automatically locates or creates a Semester based on current date.
 
     If a person with the same parameters already exist, an error will be shown on add-page.
     """
     if not request.POST:
-        return render_to_response('core/add.html', context_instance=RequestContext(request))
-
-    if 'info' in request.POST:
-        return render_to_response('core/add.html', {'info':request.POST['info']})
+        return render_to_response('core/add.html', _get_newest_members(), context_instance=RequestContext(request))
 
     if not 'name' in request.POST or request.POST['name']=="":
-        return render_to_response('core/add.html', {'fail':'no name in POST-data'}, context_instance=RequestContext(request))
+        v = _get_newest_members()
+        v['error']=True
+        return render_to_response('core/add.html', v, context_instance=RequestContext(request))
 
-    args={'name':request.POST['name']}
+    args={'lifetime':False, 'name':request.POST['name']}
+
     if 'email' in request.POST and request.POST['email']!="":
         args['email']=request.POST['email']
-
-    if 'life' in request.POST and request.POST['life']!="":
-        args['lifetime']=True if request.POST['life'] == 'life' else False
 
     now=datetime.date.today()
     s=Semester.objects.filter(start_date__lte=now, end_date__gte=now)
@@ -70,78 +38,129 @@ def add_person(request):
     try:
         p=Person.objects.create(**args)
     except:
-        return render_to_response('core/add.html', {'fail':'Database-error, most likely name is already added..'}, context_instance=RequestContext(request))
+        v = _get_newest_members()
+        v['info']=True
+        return render_to_response('core/add.html', v, context_instance=RequestContext(request))
+    return render_to_response('core/add.html', _get_newest_members(), context_instance=RequestContext(request))
 
-    return render_to_response('core/add.html', {'name':args['name']}, context_instance=RequestContext(request))
+def search(request):
+    if not request.POST or not 'search' in request.POST or request.POST['search']=='':
+        return render_to_response('core/search.html', context_instance=RequestContext(request))
 
-def edit_person(request):
-    """
-    locates a person based on name and email in POST, and updates it with values new_name, new_email and life from POST.
+    if 'all' in request.POST:
+        return render_to_response('core/search.html',{'results':_get_all(request.POST['search'])}, context_instance=RequestContext(request))
 
-    error is shown if new_name == "" or an error occures when saving.
-    """
-    if not 'name' in request.POST:
-        return render_to_response('core/add.html', {'fail':'Cannot find person to edit.'}, context_instance=RequestContext(request))
+    if 'valid' in request.POST:
+        return render_to_response('core/search.html',{'results':_get_valid(request.POST['search'])}, context_instance=RequestContext(request))
 
-    p=Person.objects.get(name=request.POST['name'], email=request.POST['email'])
+    if 'life' in request.POST:
+        return render_to_response('core/search.html',{'results':_get_life(request.POST['search'])}, context_instance=RequestContext(request))
 
-    if not 'save' in request.POST:
-        life = 'life' if p.lifetime else 'single'
-        return render_to_response('core/edit.html', {'person':p, 'membership':life}, context_instance=RequestContext(request))
 
-    if request.POST['new_name'] == "":
-        return render_to_response('core/add.html', {'fail':'Edit failed! Cannot save person with no name..'}, context_instance=RequestContext(request))
+def valid(request):
+    args={
+          'type':'valid',
+          'results':_get_valid(),
+          'head':'All valid members!',
+          'caption':' - kind of nice to know who they are, right?'
+         }
+    return render_to_response('core/list.html', args, context_instance=RequestContext(request))
 
-    p.name=request.POST['new_name']
-    p.email=request.POST['new_email']
-    p.lifetime=True if request.POST['life'] == "life" else False
+def life(request):
+    args={
+          'type':'life',
+          'results':_get_life(),
+          'head':'Lifetime memberships!',
+          'caption':' - So awesome that they get their own page!'
+         }
+    return render_to_response('core/list.html', args, context_instance=RequestContext(request))
+
+def all(request):
+    args={
+          'type':'all',
+          'results':_get_all(),
+          'head':'All members!',
+          'caption':' - because, why not?'
+         }
+    return render_to_response('core/list.html', args, context_instance=RequestContext(request))
+    return render_to_response('core/list.html', context_instance=RequestContext(request))
+
+def _get_valid(search=""):
+    now=datetime.date.today()
+    s=Semester.objects.filter(start_date__lte=now, end_date__gte=now)
+    qs=Person.objects.filter(name__icontains=search, lifetime=True)
+    if not len(s) == 0:
+        s=s[0]
+        qs1=Person.objects.filter(name__icontains=search, semester=s)
+        qs=qs|qs1
+
+    qs.order_by('-date_join')
+
+    return qs
+
+def _get_life(search=""):
+    return Person.objects.filter(name__icontains=search, lifetime=True)
+
+def _get_all(search=""):
+    return Person.objects.filter(name__icontains=search)
+
+
+def view(request):
+    if request.POST and 'cancel' in request.POST:
+        return render_to_response('core/add.html', _get_newest_members(), context_instance=RequestContext(request))
+
+    if not request.POST or not 'id' in request.POST:
+        v = _get_newest_members()
+        v['error']=True
+        return render_to_response('core/add.html', v, context_instance=RequestContext(request))
+
+    p=Person.objects.get(id=request.POST['id'])
+    if 'delete' in request.POST:
+        return render_to_response('core/delete.html', {'person':p}, context_instance=RequestContext(request))
+
+    if not 'name' in request.POST or not 'email' in request.POST:
+        return render_to_response('core/view.html', {'person':p}, context_instance=RequestContext(request))
+
+    p.name = request.POST['name']
+    p.email = request.POST['email']
+    p.lifetime = True if 'lifetime' in request.POST else False
+
+    p.save()
+
+    v=_get_newest_members()
+    v['success']=True
+    return render_to_response('core/add.html', v, context_instance=RequestContext(request))
+
+def delete(request):
+    if not request.POST or not 'id' in request.POST:
+        v=_get_newest_members()
+        v['error']=True
+        return render_to_response('core/add.html', v, context_instance=RequestContext(request))
+
+    if 'cancel' in request.POST or not 'confirm' in request.POST:
+        return render_to_response('core/add.html', _get_newest_members(), context_instance=RequestContext(request))
 
     try:
-        p.save()
+        Person.objects.get(id=request.POST['id']).delete()
     except:
-        return render_to_response('core/add.html', {'fail':'Database-error, most likely name already exists..'}, context_instance=RequestContext(request))
-    return render_to_response('core/add.html', {'name':p.name}, context_instance=RequestContext(request))
+        v=_get_newest_members()
+        v['error']=True
+        return render_to_response('core/add.html', v, context_instance=RequestContext(request))
 
 
-def list_all_ever(request):
-    """
-    lists all people, and gives info on how many members last 12 hours, and how many lifetime members.
-    """
-    gap=datetime.datetime.now()-datetime.timedelta(hours=12)
-    people=Person.objects.all()
-    lifetime=len(people.filter(lifetime=True))
-    current=len(people.filter(date_join__gte=gap))
-    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'num_cur':current, 'num_life':lifetime, 'headline':'All members since the dawn of time'}, context_instance=RequestContext(request))
+    v=_get_newest_members()
+    v['success']=True
+    return render_to_response('core/add.html', v, context_instance=RequestContext(request))
 
-def list_current_nolifetime(request):
-    """
-    same as list_person, but only lists people who are members this semester, or are lifetime members.
-    """
-    gap=datetime.datetime.now()-datetime.timedelta(hours=12)
-    now=datetime.date.today()
-    s=Semester.objects.filter(start_date__lte=now, end_date__gte=now)[0]
-    people=Person.objects.all().exclude(lifetime=True).exclude(date_join__lte=s.start_date)
-    current=len(people.filter(date_join__gte=gap))
-    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'num_cur':current, 'headline':'All current members (except lifetime-members)'}, context_instance=RequestContext(request))
+def _get_newest_members(numback=4):
+    people=Person.objects.order_by('-date_join')[:numback]
+    vals={}
+    i=1
+    for p in people:
+        vals['sub{}'.format(i)]=p
+        i+=1
 
-def list_current(request):
-    """
-    same as list_person, but only lists people who are members this semester, or are lifetime members.
-    """
-    gap=datetime.datetime.now()-datetime.timedelta(hours=12)
-    now=datetime.date.today()
-    s=Semester.objects.filter(start_date__lte=now, end_date__gte=now)[0]
-    people=Person.objects.all().exclude(lifetime=False, date_join__lte=s.start_date)
-    lifetime=len(people.filter(lifetime=True))
-    current=len(people.filter(date_join__gte=gap))
-    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'num_cur':current, 'num_life':lifetime, 'headline':'All valid members this semester'}, context_instance=RequestContext(request))
-
-def list_lifetime(request):
-    """
-    lists only lifetime members
-    """
-    people=Person.objects.filter(lifetime=True)
-    return render_to_response('core/list.html', {'people':people, 'total':len(people), 'headline':'Lifetime members'}, context_instance=RequestContext(request))
+    return vals
 
 def makesemester():
     """
@@ -159,27 +178,8 @@ def makesemester():
     s=Semester.objects.create(name='v_{}'.format(now.year), start_date=datetime.date(now.year, 1, 1), end_date=(tmp-datetime.timedelta(days=1)))
     return s
 
-def index(request):
-    """
-    show main page
-    """
-    return render_to_response('core/index.html')
+def about(request):
+    return render_to_response('about.html', context_instance=RequestContext(request))
 
-def search(request):
-    """
-    return a list of all people matching name in POST.
-
-    if membership is in post, and POST[membership] is 'lifetime' only lifetime members will be searched.
-    """
-    if not request.POST:
-        return render_to_response('core/search.html', {}, context_instance=RequestContext(request))
-
-    people=Person.objects.filter(name__icontains=request.POST['name'])
-
-    if not 'membership' in request.POST or request.POST['membership'] == 'all':
-        now=datetime.date.today()
-        s=Semester.objects.filter(start_date__lte=now, end_date__gte=now)[0]
-        people=people.exclude(lifetime=False, date_join__lte=s.start_date)
-        return render_to_response('core/list.html', {'people':people, 'headline':'Search-results for: '.format(request.POST['name']), 'origin':'search'}, context_instance=RequestContext(request))
-    people=people.filter(lifetime=True)
-    return render_to_response('core/list.html', {'people':people, 'headline':'Search-results for: '.format(request.POST['name']), 'origin':'search'}, context_instance=RequestContext(request))
+def notes(request):
+    return render_to_response('notes.html', context_instance=RequestContext(request))

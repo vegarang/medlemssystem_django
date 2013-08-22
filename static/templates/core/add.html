@@ -1,28 +1,110 @@
-<h1> Add Person! </h1>
+{% extends "sitebase.html" %}
 
-{% if name %}{{ name }} saved!<br>{% endif %}
+{% block addactive %}class="active"{% endblock %} 
 
-{% if removed %}{{ removed }} was deleted<br>{% endif %}
+{% block title %}CYB - add member{% endblock %}
 
-{% if info %}{{ info }}<br>{% endif %}
+{% block maincontent %}
+    <h1>New member!</h1>
+    <p> - join us! all the cool kids are doing it..</p>
+    {% if error %}
+    <p class="text-error">I'm sorry, Dave. I'm afraid I can't do that..</p>
+    {% endif %}
+    {% if info %}
+    <p class="text-info">Hey! We dont want to steal your money, and you're already registered :-)</p>
+    {% endif %}
+    {% if success %}
+    <p class="text-success">Success!</p>
+    {% endif %}
+    <form class="form-inline" action="/add" method="post">
+        {% csrf_token %}
+        <input type="text" class="input" name="name" id="name" placeholder="Full name">
+        <input type="text" class="input" name="email" id="email" placeholder="Email address">
+        <button type="submit" class="btn-primary btn">Save » </button>
+    </form>
+    
+{% endblock %}
 
-{% if fail %}<strong>{{ fail }}</strong><br>{% endif %}
-<p>
-<form action="/person/add" method="post">
-    {% csrf_token %}
+{% block sub1 %}
+    {% if sub1 %}
+    <div class="well well-small">
+    <p>{{sub1.name}}</p>
+    <p>{{sub1.date_join}}</p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub1.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
+    {% endif %}
+{% endblock %}
 
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" /></br>
+{% block sub2 %}
+    {% if sub2 %}
+    <div class="well well-small">
+    <p>{{sub2.name}}</p>
+    <p>{{sub2.date_join}}</p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub2.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
+    {% endif %}
+{% endblock %}
 
-    <label for="email">Email</label>
-    <input type="text" name="email" id="email" /></br>
+{% block sub3 %}
+    {% if sub3 %}
+    <div class="well well-small">
+    <p>{{sub3.name}}</p>
+    <p>{{sub3.date_join}}</p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub3.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
+    {% endif %}
+{% endblock %}
 
-    <input type="radio" name="life" value="single" checked />Single semester</br>
-    <input type="radio" name="life" value="life" />Lifetime membership</br>
+{% block sub4 %}
+    {% if sub4 %}
+    <div class="well well-small">
+    <p>{{sub4.name}}</p>
+    <p>{{sub4.date_join}}</p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub4.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
+    {% endif %}
+{% endblock %}
 
-    <input type="submit" value="Save"/>
-</form>
+{% block sub5 %}
+    {% if sub5 %}
+    <div class="well well-small">
+    <p>{{sub5.name}}</p>
+    <p>{{sub5.date_join}}</p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub5.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
+    {% endif %}
+{% endblock %}
 
-<p>
-<a href="/person/list">List all people</a><br>
-<a href="/">Main menu</a>
+{% block sub6 %}
+    {% if sub6 %}
+    <div class="well well-small">
+    <p>{{sub6.name}}</p>
+    <p>{{sub6.date_join}}</p>
+    <form class="form-inline" action="/view" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="input" name="id" id="id" value={{sub6.id}}>
+        <button type="submit" class="btn-small btn">Edit » </button>
+    </form>
+    </div>
+    {% endif %}
+{% endblock %}

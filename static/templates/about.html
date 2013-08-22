@@ -1,0 +1,38 @@
+{% extends "sitebase.html" %}
+
+{% block aboutactive %}class="active"{% endblock %} 
+
+{% block title %}CYB - list all{% endblock %}
+
+{% block maincontent %}
+    <h1>Open Source</h1>
+    <p> - that's what it's all about!</p>
+    <p></p>
+    <p>it's on <a href="http://www.github.com/vegarang/medlemssystem_django">GitHub!</a></p>
+    <p>And here are the Open-Source technologies that keeps the system going:</p>
+{% endblock %}
+
+{% block sub1 %}
+    <h2><a href="http://www.djangoproject.org">Django</a></h2>
+    <p>One MVC to rule them all! And also the foundation of this system</p>
+{% endblock %}
+
+{% block sub2 %}
+    <h2><a href="http://twitter.github.io.com/bootstrap/">Bootstrap</a></h2>
+    <p>twitters awesome framework for an easy-to-make, flexible and good-looking user-interface!</p>
+{% endblock %}
+
+{% block sub3 %}
+    <h2><a href="http://">PostgreSQL</a></h2>
+    <p>Fast, stable database!</p>
+{% endblock %}
+
+{% block sub4 %}
+    <h2><a href="http://">NginX</a></h2>
+    <p>A lightweight, fast, easily-configurable http-server</p>
+{% endblock %}
+
+{% block sub5 %}
+    <h2><a href="http://">Gunicorn</a></h2>
+    <p>Come on! it's a green unicorn! How can any other wsgi-server compete with that?</p>
+{% endblock %}

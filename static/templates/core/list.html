@@ -1,31 +1,35 @@
-<h1> {{ headline }} </h1>
+{% extends "sitebase.html" %}
 
-{% if total %} {{ total }} total <br>{% endif %}
-{% if num_cur %} {{ num_cur }} new members last 12 hours <br>{% endif %}
-{% if num_life %}{{ num_life }} <a href="/person/listlifetime">lifetime</a> members <br>{% endif %}
+{% block {{type}}active %}class="active"{% endblock %} 
 
-<p>
+{% block title %}CYB - list members{% endblock %}
 
-<table>
-    {% for person in people %}
-    <tr>
-        <form action="/person/edit" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="check" />
-            <input type="hidden" name="name" value="{{ person.name }}" />
-            <input type="hidden" name="email" value="{{ person.email }}" />
-            <td>{{ person.name }} </td>
-            <td><input type="submit" value="edit"/></td>
-        </form>
-        </li>
-    </tr>
-    {% endfor %}
-</table>
+{% block maincontent %}
+    <h1>{{head}}</h1>
+    <p>{{caption}}</p>
+{% endblock %}
 
-<p>
+{% block sub1 %}
+    {% if results %}
+        <h2>Peoples:</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Timestamp</td>
+                    <td>Name</td>
+                    <td>Email address</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in results %}
+                    <tr>
+                        <td>{{res.date_join}}</td>
+                        <td>{{res.name}}</td>
+                        <td>{{res.email}}</td>
+                    </tr>
+                {% endfor %}
+            <tbody>
+        </table>
+    {% endif %}
+{% endblock %}
 
-{% if origin %}
-<a href="/person/{{ origin }}">Back to {{ origin }}</a><br>
-{% endif %}
-<a href="/person/add">Add person</a><br>
-<a href="/">Main menu</a>

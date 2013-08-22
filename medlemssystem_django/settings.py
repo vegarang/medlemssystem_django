@@ -4,9 +4,11 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # You can key the configurations off of anything - I use project path.
 configs = {
-    '/home/vegard/Documents/medlemssystem_django_nojs/medlemssystem_django': 'dev',
     '/home/cyb/Documents/medlemssystem_django_nojs/medlemssystem_django': 'prod',
 }
+
+if not ROOT_PATH in configs:
+    configs[ROOT_PATH] = 'dev'
 
 # Import the configuration settings file - REPLACE projectname with your project
 config_module = __import__('settings_{}'.format(configs[ROOT_PATH]), globals(), locals(), 'projectname')
