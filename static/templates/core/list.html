@@ -30,7 +30,7 @@
                         <td>
                             <form class="form-inline" action="/view" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" class="input" name="id" id="id" value={{sub1.id}}>
+                                <input type="hidden" class="input" name="id" id="id" value={{res.id}}>
                                 <button type="submit" class="btn-mini btn">edit</button>
                             </form>
                         </td>

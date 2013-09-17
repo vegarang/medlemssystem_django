@@ -18,7 +18,7 @@
     {% endif %}
     <form class="form-inline" action="/add" method="post">
         {% csrf_token %}
-        <input type="text" class="input" name="name" id="name" placeholder="Full name">
+        <input type="text" class="input" name="name" id="name" autofocus placeholder="Full name">
         <input type="text" class="input" name="email" id="email" placeholder="Email address">
         <button type="submit" class="btn-primary btn">Save » </button>
     </form>
